@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prediction Result</title>
+  <style>
+    :root {
+      --primary-color: #007bff;
+      --primary-hover: #0056b3;
+      --text-color: #343a40;
+      --background: #f8f9fa;
+      --card-bg: #fff;
+      --border-color: #ced4da;
+      --border-radius: 6px;
+      --font-family: Arial, sans-serif;
+      --spacing-unit: 16px;
+    }
+
+    /* Fixed header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 24px;
+      font-family: var(--font-family);
+      z-index: 1000;
+      user-select: none;
+    }
+
+    header .project-name {
+      color: var(--primary-color);
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    .logout-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary-color);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .logout-link svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--primary-color);
+      flex-shrink: 0;
+    }
+
+    .logout-link:hover,
+    .logout-link:focus {
+      color: var(--primary-hover);
+      outline: none;
+    }
+
+    .logout-link:hover svg,
+    .logout-link:focus svg {
+      fill: var(--primary-hover);
+    }
+
+    /* Body and main */
+    body {
+      font-family: var(--font-family);
+      background-color: var(--background);
+      margin: 0;
+      padding: calc(var(--spacing-unit) * 3) 16px 40px; /* Add padding top for fixed header + sides */
+      padding-top: 70px;
+      color: var(--text-color);
+      line-height: 1.5;
+      display: flex;
+      justify-content: center;
+      box-sizing: border-box;
+      min-height: 100vh;
+    }
+
+    main {
+      background-color: var(--card-bg);
+      max-width: 600px;
+      width: 100%;
+      padding: calc(var(--spacing-unit) * 2);
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+    }
+
+    h2, h3 {
+      margin-top: 0;
+      margin-bottom: var(--spacing-unit);
+      border-bottom: 2px solid #dee2e6;
+      padding-bottom: 6px;
+      font-weight: 700;
+      color: var(--text-color);
+    }
+
+    ul {
+      list-style-type: disc;
+      padding-left: calc(var(--spacing-unit) * 2);
+      margin-top: 0;
+      margin-bottom: var(--spacing-unit);
+    }
+
+    li {
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    p {
+      font-size: 16px;
+      margin-top: 0;
+      margin-bottom: var(--spacing-unit);
+    }
+
+    .highlight {
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    form {
+      margin-top: calc(var(--spacing-unit) * 2);
+      padding: calc(var(--spacing-unit) * 1.5);
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      box-sizing: border-box;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    select {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      box-sizing: border-box;
+      transition: border-color 0.2s ease;
+    }
+
+    select:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      box-shadow: 0 0 5px var(--primary-color);
+    }
+
+    button {
+      margin-top: var(--spacing-unit);
+      padding: 12px 0;
+      font-size: 16px;
+      background-color: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      width: 100%;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover,
+    button:focus {
+      background-color: var(--primary-hover);
+      outline: none;
+    }
+
+    a.back-link {
+      display: inline-block;
+      margin-top: calc(var(--spacing-unit) * 2);
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+
+    a.back-link:hover,
+    a.back-link:focus {
+      text-decoration: underline;
+      color: var(--primary-hover);
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <header role="banner" aria-label="Main navigation">
+    <div class="project-name">MedAssist</div>
+    <a class="logout-link" href="{{ url_for('logout') }}" tabindex="0" aria-label="Logout">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M16 13v-2H7V8l-5 4 5 4v-3zM20 3h-9v2h9v14h-9v2h9a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/>
+      </svg>
+      Logout
+    </a>
+  </header>
+
+  <main>
+    <h2>Selected Symptoms:</h2>
+    <ul>
+      {% for symptom in symptoms %}
+        <li>{{ symptom.replace('_', ' ') }}</li>
+      {% endfor %}
+    </ul>
+
+    <h3>Naive Bayes Predictions (Top 3):</h3>
+    <ul>
+      {% for disease, prob in nb_predictions %}
+        <li>{{ disease }} ({{ "%.2f"|format(prob * 100) }}%)</li>
+      {% endfor %}
+    </ul>
+
+    <h2>Predicted Disease: <span class="highlight">{{ disease }}</span></h2>
+
+    <form method="POST" action="{{ url_for('recommend') }}" aria-label="Hospital and Specialty Recommendation Form">
+      <input type="hidden" name="disease" value="{{ disease }}">
+      <label for="state">Select your state:</label>
+      <select name="state" id="state" required aria-required="true" aria-describedby="stateHelp">
+        <option value="">-- Select State --</option>
+        {% for state in states %}
+          <option value="{{ state }}">{{ state }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Get Hospital &amp; Specialty Recommendation</button>
+    </form>
+
+    <a class="back-link" href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+  </main>
+</body>
+</html>

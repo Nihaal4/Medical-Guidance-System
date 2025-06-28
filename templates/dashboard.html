@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            padding: 30px;
+            margin: 0;
+            /* Padding top for fixed header */
+            padding-top: 60px;
+            color: #2d3436;
+        }
+
+        /* Fixed header with project name and logout */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            z-index: 999;
+            user-select: none;
+        }
+
+        header .project-name {
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: #6c5ce7;
+        }
+
+        .logout-link {
+            color: #6c5ce7;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .logout-link svg {
+            width: 16px;
+            height: 16px;
+            fill: #6c5ce7;
+            flex-shrink: 0;
+        }
+
+        .logout-link:hover,
+        .logout-link:focus {
+            text-decoration: underline;
+            outline: none;
+            color: #553dc6;
+            fill: #553dc6;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        p {
+            text-align: center;
+            color: #555;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 1rem;
+            user-select: none;
+        }
+
+        h2 {
+            margin-top: 30px;
+            margin-bottom: 10px;
+            color: #2d3436;
+        }
+
+        .search-bar {
+            width: 100%;
+            margin-bottom: 20px;
+            position: relative;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #symptomSearch {
+            width: 100%;
+            padding: 10px 35px 10px 15px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        #symptomSearch:focus {
+            border-color: #6c5ce7;
+            outline: none;
+            box-shadow: 0 0 6px rgba(108, 92, 231, 0.4);
+        }
+
+        /* Search icon inside input */
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            fill: #6c5ce7;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        legend {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 18px;
+            color: #2d3436;
+            user-select: none;
+        }
+
+        .symptom-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px 20px;
+            padding: 10px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .symptom-grid label {
+            background-color: #f1f2f6;
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .symptom-grid label:hover,
+        .symptom-grid label:focus-within {
+            background-color: #dfe6e9;
+        }
+
+        .symptom-grid input[type="checkbox"] {
+            margin-right: 10px;
+            accent-color: #6c5ce7;
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 12px 30px;
+            font-size: 16px;
+            background-color: #6c5ce7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: background-color 0.3s ease;
+            user-select: none;
+        }
+
+        button:hover,
+        button:focus {
+            background-color: #5a4cd4;
+            outline: none;
+        }
+
+        button:focus {
+            outline: 3px solid #6c5ce7;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<header role="banner" aria-label="Main navigation">
+    <div class="project-name">MedAssist</div>
+    <a class="logout-link" href="{{ url_for('logout') }}" tabindex="0" aria-label="Logout">
+        <!-- Simple logout icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M16 13v-2H7V8l-5 4 5 4v-3zM20 3h-9v2h9v14h-9v2h9a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/>
+        </svg>
+        Logout
+    </a>
+</header>
+
+<div class="container">
+    <h1>Welcome to the Dashboard</h1>
+    <p>You're successfully logged in.</p>
+
+    <form method="POST" action="{{ url_for('predict') }}">
+        <fieldset>
+            <legend>Select Symptoms (Please select at least 2 symptoms)</legend>
+
+            <div class="search-bar">
+                <input 
+                    type="text" 
+                    id="symptomSearch" 
+                    placeholder="Search symptoms by name..." 
+                    aria-label="Search symptoms"
+                >
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M21 21l-4.35-4.35m1.3-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0z" stroke="#6c5ce7" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+
+            <div class="symptom-grid" id="symptomGrid" tabindex="0" aria-live="polite" aria-relevant="additions removals">
+                {% for symptom in symptoms %}
+                    <label>
+                        <input type="checkbox" name="symptoms" value="{{ symptom }}">
+                        {{ symptom.replace("_", " ").capitalize() }}
+                    </label>
+                {% endfor %}
+            </div>
+        </fieldset>
+
+        <button type="submit">Predict Disease</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Form validation: Require at least 2 symptoms selected
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const selected = document.querySelectorAll('input[type="checkbox"]:checked');
+            if (selected.length < 2) {
+                alert("Please select at least 2 symptoms.");
+                e.preventDefault();
+            }
+        });
+
+        // Symptom search filter
+        const searchInput = document.getElementById('symptomSearch');
+        const grid = document.getElementById('symptomGrid');
+
+        searchInput.addEventListener('input', function () {
+            const filter = this.value.toLowerCase();
+            const labels = grid.querySelectorAll('label');
+            labels.forEach(label => {
+                const text = label.textContent.toLowerCase();
+                label.style.display = text.includes(filter) ? '' : 'none';
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

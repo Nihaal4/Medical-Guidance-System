@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recommendation</title>
+  <style>
+    :root {
+      --primary-color: #007bff;
+      --primary-hover: #0056b3;
+      --text-color: #343a40;
+      --background: #f8f9fa;
+      --card-bg: #fff;
+      --border-color: #ced4da;
+      --border-radius: 6px;
+      --font-family: Arial, sans-serif;
+      --spacing-unit: 16px;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--background);
+      margin: 0;
+      padding: calc(var(--spacing-unit) * 3);
+      color: var(--text-color);
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: calc(var(--spacing-unit) * 2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      font-weight: 700;
+      user-select: none;
+    }
+
+    header a.logout-link {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--primary-color);
+      text-decoration: none;
+      border: 1.5px solid var(--primary-color);
+      padding: 6px 14px;
+      border-radius: var(--border-radius);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    header a.logout-link:hover,
+    header a.logout-link:focus {
+      background-color: var(--primary-color);
+      color: #fff;
+      outline: none;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background-color: var(--card-bg);
+      padding: calc(var(--spacing-unit) * 2);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      text-align: left;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: var(--spacing-unit);
+      color: var(--text-color);
+      border-bottom: 2px solid #dee2e6;
+      padding-bottom: 6px;
+      font-weight: 700;
+    }
+
+    hr {
+      border: none;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: var(--spacing-unit);
+    }
+
+    p {
+      font-size: 16px;
+      margin-top: 0;
+      margin-bottom: var(--spacing-unit);
+    }
+
+    strong {
+      font-weight: 600;
+    }
+
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    a:hover,
+    a:focus {
+      text-decoration: underline;
+      color: var(--primary-hover);
+      outline: none;
+    }
+
+    .map-link {
+      margin-top: 10px;
+      display: inline-block;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>MedAssist</h1>
+    <a href="{{ url_for('logout') }}" class="logout-link" tabindex="0">Logout</a>
+  </header>
+
+  <div class="container">
+    <h2>Recommendation for {{ disease }}</h2>
+    <hr>
+    {% if error %}
+      <p style="color:red;">{{ error }}</p>
+    {% else %}
+      <p><strong>Speciality:</strong> {{ specialty }}</p>
+      <p><strong>Hospital:</strong> {{ hospital }}</p>
+      <p><strong>Location:</strong> {{ place }}, {{ state }}</p>
+      <a class="map-link" href="https://www.google.com/maps/search/{{ hospital | urlencode }}+{{ place | urlencode }},+{{ state | urlencode }}" target="_blank" rel="noopener noreferrer">
+        📍 View on Google Maps
+      </a>
+    {% endif %}
+    <br>
+    <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+  </div>
+
+</body>
+</html>

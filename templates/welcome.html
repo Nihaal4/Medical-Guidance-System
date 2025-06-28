@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome | MedAssist</title>
+  <style>
+    body {
+      background-color: #f0f8ff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 150px;
+      margin: 0;
+      color: #004d40;
+    }
+
+    .container {
+      background-color: #ffffff;
+      border: 2px solid #00796b;
+      border-radius: 10px;
+      display: inline-block;
+      padding: 40px 60px;
+      box-shadow: 0 0 15px rgba(0, 121, 107, 0.3);
+      max-width: 420px;
+      width: 90%;
+    }
+
+    h1 {
+      color: #00796b;
+      margin-bottom: 15px;
+      font-weight: 700;
+      font-size: 2.3rem;
+      text-transform: capitalize;
+      letter-spacing: 0.05em;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: #333333;
+      margin-bottom: 35px;
+      line-height: 1.5;
+    }
+
+    .btn {
+      font-size: 1rem;
+      padding: 12px 30px;
+      background-color: #00796b;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 5px 12px rgba(0, 121, 107, 0.3);
+      transition: background-color 0.3s ease;
+      display: inline-block;
+      font-weight: 600;
+    }
+
+    .btn:hover,
+    .btn:focus {
+      background-color: #004d40;
+      outline: none;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding-top: 100px;
+      }
+
+      .container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+
+      .btn {
+        padding: 10px 25px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" role="main" aria-label="Welcome message">
+    <h1>Welcome, {{ name|capitalize }}!</h1>
+    <p>You're now logged in. Ready to continue?</p>
+    <a href="{{ url_for('dashboard') }}" class="btn" role="button" aria-label="Go to dashboard">Go to Dashboard</a>
+  </div>
+
+</body>
+</html>
